@@ -15,7 +15,7 @@ Part                               | Price                 | Order/link
 LoRaWAN concentrator board         | £200                  | ic880a ([IMST Webshop](http://webshop.imst.de/ic880a-spi-lorawan-concentrator-868mhz.html))
 UF.L (IPAX) to N-type pigtail lead | £7                    | [Solwise PIG-IPAXNCHSSKT25](http://www.solwise.co.uk/wireless-cable.htm)
 RPi to iC880a interface            | £7                    | supplied from; <ul><li>[Tindie](https://www.tindie.com/products/gnz/imst-ic880a-lorawan-backplane/)</li><li>from @DefProc, with headers</li></ul>
-Raspberry Pi 2                     | £32                   | RPi2: <ul><li>[Farnell 2612474](http://uk.farnell.com/raspberry-pi/rpi2-modb-v1-2/sbc-raspberry-pi-2-model-b-v1/dp/2612474)</li><li>[Amazon](https://www.amazon.co.uk/gp/product/B00T2U7R7I/)</li>
+Raspberry Pi 2                     | £32                   | RPi2: <ul><li>[Farnell 2612474](http://uk.farnell.com/raspberry-pi/rpi2-modb-v1-2/sbc-raspberry-pi-2-model-b-v1/dp/2612474)</li><li>[Amazon](http://amzn.to/2kUvuHh)</li>
 MicroSD Card (8Gb+)                | £7                    | A Sandisk Extreme/Ultra in 8Gb or 16Gb is preferred (based on usage bias) [Amazon](https://www.amazon.co.uk/gp/product/B012VKUSIA)
 up to 32V input down to to 5V  output DC-DC voltage converter | £11 | Pololu 5V 5A Step-Down Voltage Regulator D24V50F5 ([hobbytronics](http://www.hobbytronics.co.uk/d24v50f5-5v-step-down-regulator))
 2.1mm DC socket to micro-B USB plug | £1 | ([Amazon](https://www.amazon.co.uk/gp/product/B01K1TR7HS/))
