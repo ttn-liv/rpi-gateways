@@ -23,7 +23,7 @@ POE midspan injector leads         | £6 | ([Pimoroni](https://shop.pimoroni.com
 IP 67 rated enclosure with Ethernet and N-type holes, wall and pole mounting kit | £20 (plus £20 p&p) | EZNET EZ-SOE01W ([Aerial.net](http://www.aerial.net/shop/product/39/1102/ezynet-outdoor-enclosure-1-ethernet.html))
 LMR200/HDF200 co-axial cable       | £1/meter | [Solwise HDF200](http://www.solwise.co.uk/wireless_connectorssundries.htm)
 N-type Plug for LMR200/HDF200 cable (50ohm) ×2 | £3.10 | [Solwise N-Type 200 Plug](http://www.solwise.co.uk/wireless_connectorssundries.htm)
-N-Type plug/jack inline coaxial lightning arrestor | £31 | Diamond SP-3000P ([Waters and Stanton](http://hamradiostore.co.uk/diamond-sp-3000p-lightning-arrester.html))
+N-Type plug/jack inline coaxial surge arrestor | £31 | Diamond SP-3000P <ul><li>[Waters and Stanton](http://hamradiostore.co.uk/diamond-sp-3000p-lightning-arrester.html)</li><li>[Radio World](http://www.radioworld.co.uk/static_discharge_protector/diamond-sp-3000p-lightning-surge-arrester-dc-3000-mhz-400w-pep-n-type-plug-to-n-type-socket)</li></ul>
 Ethernet Network surge arrestor    | £20 | <ul><li>eg [APC PNET1GB](http://amzn.to/2kzWMq8)</li><li>or [LRS01-E100](http://amzn.to/2m9gVjl)</li></ul>
 
  * The IP67 rated case that we're using has N-type connector holes, so we're
