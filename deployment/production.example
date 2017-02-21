@@ -1,0 +1,10 @@
+# production gateways
+
+# gateways group
+[gateways]
+# host names for the production gateways go here
+# they will move here once they've gone out for deployment
+# record the actual details in a yml file in
+# host_vars with the same name.
+# eg.
+example

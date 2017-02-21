@@ -1,0 +1,16 @@
+{
+	"gateway_conf": {
+		"gateway_ID": "{{ locally_generated_eui.stdout|upper }}",
+		"servers": [{
+			"server_address": "{{ ttn_server_address }}",
+			"serv_port_up": {{ ttn_server_port_up }},
+			"serv_port_down": {{ ttn_server_port_down }},
+			"serv_enabled": true
+		}],
+		"ref_latitude": {{ gateway_lat }},
+		"ref_longitude": {{ gateway_lon }},
+		"ref_altitude": {{ gateway_alt }},
+		"contact_email": "{{ gateway_email }}",
+		"description": "{{ gateway_name }}"
+	}
+}

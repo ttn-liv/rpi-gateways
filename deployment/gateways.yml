@@ -1,0 +1,6 @@
+- hosts: gateways
+  serial: 1
+  become_method: sudo
+  roles:
+    - common
+    - gateways

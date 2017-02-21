@@ -1,0 +1,14 @@
+[Unit]
+Description=Prometheus Server
+Documentation=https://prometheus.io/docs/introduction/overview/
+After=network-online.target
+
+[Service]
+User={{ ansible_user }}
+Restart=on-failure
+ExecStart=/home/{{ ansible_user }}/prometheus/server/prometheus \
+          -config.file=/home/{{ ansible_user }}/prometheus/server/prometheus.yml \
+          -storage.local.path=/home/{{ ansible_user }}/prometheus/data
+
+[Install]
+WantedBy=multi-user.target

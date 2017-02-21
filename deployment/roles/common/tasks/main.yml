@@ -1,0 +1,33 @@
+- name: add tor package repo
+  become: true
+  apt_repository:
+    repo: deb http://deb.torproject.org/torproject.org jessie main
+    state: present
+  register: add_tor_repo
+
+- name: get the tor gpg key
+  become: true
+  apt_key:
+    keyserver: keys.gnupg.net
+    id: A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
+  register: get_tor_key
+
+- name: update apt
+  when: get_tor_key.changed == true or get_tor_repo == true
+  become: true
+  apt:
+    update_cache: yes
+
+- name: check required packages are installed
+  become: true
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+  with_items:
+    - screen
+    - nginx
+    - autossh
+    - git
+    - vim
+    - tor
+    - deb.torproject.org-keyring

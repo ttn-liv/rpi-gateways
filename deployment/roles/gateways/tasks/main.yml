@@ -1,0 +1,332 @@
+- name: make sure there's no "pi" user left
+  become: true
+  user:
+    name: pi
+    state: absent
+    remove: yes
+
+# set up the tor hidden service for ssh
+- name: put the torrc in the correct place
+  template:
+    src: torrc.j2
+    dest: ~/.torrc
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0644
+  notify:
+    - restart ttn-liv-tor
+
+- name: copy the tor service file to into /lib/systemd/system
+  become: true
+  template:
+    src: ttn-liv-tor.service.j2
+    dest: /lib/systemd/system/ttn-liv-tor.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - systemctl daemon-reload
+    - restart ttn-liv-tor
+
+- name: make sure the tor default service is disabled
+  become: true
+  service:
+    name: tor
+    state: stopped
+    enabled: false
+
+- name: enable nginx if using http tor service
+  become: true
+  when: tor_http == true
+  service:
+    name: nginx
+    state: restarted
+    enabled: true
+
+- name: disable nginx if not used for tor
+  become: true
+  when: tor_http != true
+  service:
+    name: nginx
+    state: stopped
+    enabled: false
+
+- name: enable and start the tor hidden service
+  become: true
+  service:
+    name: ttn-liv-tor
+    state: started
+    enabled: true
+
+# set up the outgoing autossh port forwarding
+- name: copy the remote auto ssh service template
+  become: true
+  template:
+    src: autossh-ttn-liv-ctl.service.j2
+    dest: /etc/systemd/system/autossh-ttn-liv-ctl.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - systemctl daemon-reload
+    - restart autossh-ttn-liv-ctl
+
+- name: copy the default id_rsa to the gateway (probably worse than each gateway having it's own)
+  copy:
+    src: id_rsa.autossh
+    dest: "/home/{{ ansible_user }}/.ssh/id_rsa"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0600
+    directory_mode: 0700
+  notify:
+    - restart autossh-ttn-liv-ctl
+
+- name: start the autossh service
+  service:
+    name: autossh-ttn-liv-ctl
+    state: started
+    enabled: true
+
+# Then enable prometheus and node_monitor
+- name: wipe the current prometheus tar
+  when: reload_prometheus == true
+  file:
+    path: "/home/{{ ansible_user }}/prometheus/prometheus-{{ prometheus_version }}.tar.gz"
+    state: absent
+
+- name: get latest prometheus tar
+  # doesn't redownload if we already have it
+  get_url:
+    url: "https://github.com/prometheus/prometheus/releases/download/v1.5.2/prometheus-{{ prometheus_version }}.tar.gz"
+    dest: "/home/{{ ansible_user }}/prometheus/prometheus-{{ prometheus_version }}.tar.gz"
+  register: new_prometheus_download
+
+- name: extract prometheus
+  when: new_prometheus_download.changed == true
+  unarchive:
+    remote_src: true
+    src: "/home/{{ ansible_user }}/prometheus/prometheus-{{ prometheus_version }}.tar.gz"
+    dest: /home/{{ ansible_user }}/prometheus
+
+- name: wipe the current prometheus version
+  when: new_prometheus_download.changed == true
+  file:
+    path: /home/{{ ansible_user }}/prometheus/server
+    state: absent
+
+- name: move prometheus to the right location
+  when: new_prometheus_download.changed == true
+  command: "mv /home/{{ ansible_user }}/prometheus/prometheus-{{ prometheus_version }} /home/{{ ansible_user }}/prometheus/server"
+
+- name: wipe the current node_exporter tar
+  when: reload_node_exporter == true
+  file:
+    path: "/home/{{ ansible_user }}/prometheus/node_exporter-{{ node_exporter_version }}.tar.gz"
+    state: absent
+
+- name: get node_exporter
+  get_url:
+    url: "https://github.com/prometheus/node_exporter/releases/download/v0.13.0/node_exporter-{{ node_exporter_version }}.tar.gz"
+    dest: "/home/{{ ansible_user }}/prometheus/node_exporter-{{ node_exporter_version }}.tar.gz"
+  register: new_node_exporter_download
+
+- name: wipe the current node_exporter version
+  when: new_node_exporter_download.changed == true
+  file:
+    path: "/home/{{ ansible_user }}/prometheus/node_exporter/"
+    state: absent
+
+- name: extract node_exporter
+  when: new_node_exporter_download.changed == true
+  unarchive:
+    remote_src: true
+    src: "/home/{{ ansible_user }}/prometheus/node_exporter-{{ node_exporter_version }}.tar.gz"
+    dest: "/home/{{ ansible_user }}/prometheus"
+
+- name: move node_exporter to the right location
+  when: new_node_exporter_download.changed == true
+  command: "mv /home/{{ ansible_user }}/prometheus/node_exporter-{{ node_exporter_version }} /home/{{ ansible_user }}/prometheus/node_exporter"
+
+- name: copy across the node_exporter service
+  become: true
+  template:
+    src: node_exporter.service.j2
+    dest: /etc/systemd/system/node_exporter.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - systemctl daemon-reload
+    - reload node_exporter
+
+- name: enable node_exporter service
+  become: true
+  service:
+    name: node_exporter
+    state: started
+    enabled: true
+
+- name: copy across the prometheus config
+  copy:
+    src: prometheus.yml
+    dest: "/home/{{ ansible_user }}/prometheus/server/prometheus.yml"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0644
+  notify:
+    - reload prometheus
+
+- name: copy across the prometheus service
+  become: true
+  template:
+    src: prometheus.service.j2
+    dest: /etc/systemd/system/prometheus.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - systemctl daemon-reload
+    - reload prometheus
+
+# Then get and set up the LoRaWAN poly-packet forawarder
+
+- name: make the ttn-gateway folder
+  become: true
+  file:
+    path: /opt/ttn-gateway/bin
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: remove wiringPi if it exists
+  become: true
+  file:
+    path: /opt/wiringPi
+    state: absent
+
+- name: pull lora_gateway
+  become: true
+  git:
+    repo: https://github.com/TheThingsNetwork/lora_gateway.git
+    dest: /opt/ttn-gateway/lora_gateway
+    version: "{{ lora_gateway_version }}"
+    # TODO: not quite happy with this force, as it will *always* change
+    #       because the git repo has a changed file in it
+    force: true
+  register: lora_gateway
+
+- name: change lora_gateway option kerlink to imst_rpi
+  become: true
+  when: lora_gateway.changed == true
+  lineinfile:
+    dest: /opt/ttn-gateway/lora_gateway/libloragw/library.config
+    regexp: 'PLATFORM= '
+    line: 'PLATFORM= imst_rpi'
+
+- name: make lora_gateway
+  become: true
+  when: lora_gateway.changed == true
+  command: make
+  args:
+    chdir: /opt/ttn-gateway/lora_gateway/
+
+- name: pull the packet_forwarder
+  become: true
+  git:
+    repo: https://github.com/TheThingsNetwork/packet_forwarder.git
+    dest: /opt/ttn-gateway/packet_forwarder
+    version: "{{ packet_forwarder_version }}"
+  register: packet_forwarder
+
+- name: make packet_forwarder
+  become: true
+  when: packet_forwarder.changed == true
+  command: make
+  args:
+    chdir: /opt/ttn-gateway/packet_forwarder/
+
+- name: symlink poly_pkt_fwd into /opt/ttn-gateway/bin
+  become: true
+  file:
+    src: /opt/ttn-gateway/packet_forwarder/poly_pkt_fwd/poly_pkt_fwd
+    dest: /opt/ttn-gateway/bin/poly_pkt_fwd
+    state: link
+    owner: root
+    group: root
+
+- name: copy global_conf.json
+  become: true
+  copy:
+    remote_src: true
+    src: /opt/ttn-gateway/packet_forwarder/poly_pkt_fwd/global_conf.json
+    dest: /opt/ttn-gateway/bin/global_conf.json
+
+- name: copy local_conf template
+  when: gateway_eui is defined
+  become: true
+  template:
+    src: local_conf.json.j2
+    dest: /opt/ttn-gateway/bin/local_conf.json
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - reload ttn-gateway
+
+- name: generate the eui locally
+  when: gateway_eui is undefined
+  become: true
+  shell: "ip link show eth0 | awk '/ether/ {print $2}' | awk -F\\: '{print $1$2$3\"FFFE\"$4$5$6}'"
+  register: locally_generated_eui
+
+- name: copy local_eui_local_conf template
+  when: gateway_eui is undefined
+  become: true
+  template:
+    src: local_eui_local_conf.json.j2
+    dest: /opt/ttn-gateway/bin/local_conf.json
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - reload ttn-gateway
+  register: copy_local_conf
+
+- name: copy start.sh into place
+  become: true
+  copy:
+    src: start.sh
+    dest: /opt/ttn-gateway/bin/start.sh
+    owner: root
+    group: root
+    mode: 0644
+
+- name: copy ttn-gateway.service into place
+  become: true
+  copy:
+    src: ttn-gateway.service
+    dest: /lib/systemd/system/ttn-gateway.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - systemctl daemon-reload
+    - reload ttn-gateway
+
+- name: ensure ttn-gateway service is running and enabled
+  become: true
+  service:
+    name: ttn-gateway
+    state: started
+    enabled: true
+
+# debug output to feed back into the production hosts file
+- name: find the address of the hidden service
+  shell: cat ~/tor/hostname
+  register: tor_hostname
+
+- name: print the tor hostname for us
+  debug:
+    var: tor_hostname.stdout

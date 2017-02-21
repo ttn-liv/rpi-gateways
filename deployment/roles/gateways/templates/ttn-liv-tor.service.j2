@@ -1,0 +1,29 @@
+[Unit]
+Description=Anonymizing Overlay Network
+After=network.target
+
+[Service]
+User={{ ansible_user }}
+Group={{ ansible_user }}
+
+Type=notify
+
+# Private tmp is ALWAYS a good idea especially with services like this...
+PrivateTmp=yes
+
+# This is important; ensures permission-related exec options (User, Group)
+# are only applied to the process specified in ExecStart, not ExecStartPre etc.
+PermissionsStartOnly=true
+
+# Actual tor process is started
+ExecStart=/usr/bin/tor -f /home/{{ ansible_user }}/.torrc --RunAsDaemon 0
+
+ExecReload=/usr/bin/kill -HUP $MAINPID
+
+PIDFile=/var/run/tor/tor.pid
+KillSignal=SIGINT
+LimitNOFILE=8192
+PrivateDevices=yes
+
+[Install]
+WantedBy=multi-user.target

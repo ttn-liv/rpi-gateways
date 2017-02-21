@@ -1,0 +1,5 @@
+# we don't mind keeping the password here, as it's the raspbian default
+ansible_user: pi
+ansible_pass: raspberry
+ansible_host: raspberrypi.local
+ansible_port: 22

@@ -1,0 +1,6 @@
+- hosts: provisioning
+  serial: 1
+  become_method: sudo
+  roles:
+    - common
+    - provisioning

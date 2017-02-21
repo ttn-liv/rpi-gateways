@@ -1,0 +1,22 @@
+# copy across to gateways.yml and set your variables
+
+# set the ttn username (as we don't use root on the RPis)
+ansible_user: ttn
+
+# set the name of the graphana, autossh receiver and ansible jump-host
+# where the ssh tunnels will be available from
+control_hostname: my.always.on.vps.com
+
+# set specific program versions
+prometheus_version: 1.5.2.linux-armv7
+node_exporter_version: 0.13.0.linux-armv7
+iC880a_gateway_version: 78a5217
+packet_forwarder_version: 884bb13
+lora_gateway_version: f4329a6
+
+# common gateway ttn settings
+ttn_server_address: router.eu.thethings.network
+ttn_server_port_up: 1700
+ttn_server_port_down: 1700
+# set if you have common contact information for all the gateways
+# gateway_email: ttn@example.com

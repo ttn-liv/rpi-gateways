@@ -1,0 +1,24 @@
+# EITHER: set the direct access details for local access
+# ansible_host: 192.168.0.100
+# ansible_port: 2222
+
+# OR: set the jump-host port detail
+ansible_port: 2222 # (same as the ssh_remote_port)
+
+# Set the jump-host access ports
+ssh_remote_port: 2222
+prometheus_remote_port: 8081
+
+# record the displayed tor_address for direct acccess
+#tor_address: aaaaaaaaaaaaaaa.onion
+
+# Set the gateway specific values
+gateway_name: gateway_name
+gateway_email: gateway-owner@example.com
+gateway_lat: 0
+gateway_lon: 0
+gateway_alt: 0
+
+# uncomment and fill out to specify a gateway eui
+# otherwise, one is generated from the ethernet mac address
+# gateway_eui: AAAAAAFFFEAAAAAA

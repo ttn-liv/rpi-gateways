@@ -1,0 +1,40 @@
+---
+- name: systemctl daemon-reload
+  become: true
+  command: systemctl daemon-reload
+
+- name: reload nginx
+  become: true
+  service:
+    name: nginx
+    state: restarted
+
+- name: reload ttn-liv-tor
+  become: true
+  service:
+    name: ttn-liv-tor
+    state: restarted
+
+- name: reload autossh-ttn-liv-ctl
+  become: true
+  service:
+    name: autossh-ttn-liv-ctl
+    state: restarted
+
+- name: reload prometheus
+  become: true
+  service:
+    name: prometheus
+    state: restarted
+
+- name: reload node_exporter
+  become: true
+  service:
+    name: node_exporter
+    state: restarted
+
+- name: reload ttn-gateway
+  become: true
+  service:
+    name: ttn-gateway
+    state: restarted

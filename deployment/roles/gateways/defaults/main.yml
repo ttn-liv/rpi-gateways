@@ -1,0 +1,6 @@
+# should we make an http page available over the tor hidden service?
+tor_http: false
+# force reload of prometheus_version
+reload_prometheus: false
+# force reload of node_exporter version
+reload_node_exporter: false
