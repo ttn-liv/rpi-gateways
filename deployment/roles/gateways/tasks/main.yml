@@ -189,6 +189,13 @@
     - systemctl daemon-reload
     - reload prometheus
 
+- name: enable prometheus service
+  become: true
+  service:
+    name: prometheus
+    state: started
+    enabled: true
+
 # Then get and set up the LoRaWAN poly-packet forawarder
 
 - name: make the ttn-gateway folder
@@ -301,7 +308,7 @@
     dest: /opt/ttn-gateway/bin/start.sh
     owner: root
     group: root
-    mode: 0644
+    mode: 0755
 
 - name: copy ttn-gateway.service into place
   become: true

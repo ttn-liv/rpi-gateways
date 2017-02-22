@@ -1,5 +1,6 @@
 deployment/group_vars/all/secrets.yml
 deployment/group_vars/gateways.yml
-host_vars/*.yml
+deployment/host_vars/*.yml
 staging
 production
+site.retry
