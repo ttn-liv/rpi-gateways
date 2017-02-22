@@ -15,16 +15,16 @@ Part                               | Price                 | Order/link
 LoRaWAN concentrator board         | £200                  | ic880a ([IMST Webshop](http://webshop.imst.de/ic880a-spi-lorawan-concentrator-868mhz.html))
 UF.L (IPAX) to N-type pigtail lead | £7                    | [Solwise PIG-IPAXNCHSSKT25](http://www.solwise.co.uk/wireless-cable.htm)
 RPi to iC880a interface            | £7                    | supplied from; <ul><li>[Tindie](https://www.tindie.com/products/gnz/imst-ic880a-lorawan-backplane/)</li><li>from @DefProc, with headers</li></ul>
-Raspberry Pi 2                     | £32                   | RPi2: <ul><li>[Farnell 2612474](http://uk.farnell.com/raspberry-pi/rpi2-modb-v1-2/sbc-raspberry-pi-2-model-b-v1/dp/2612474)</li><li>[Amazon](https://www.amazon.co.uk/gp/product/B00T2U7R7I/)</li>
+Raspberry Pi 2                     | £32                   | RPi2: <ul><li>[Farnell 2612474](http://uk.farnell.com/raspberry-pi/rpi2-modb-v1-2/sbc-raspberry-pi-2-model-b-v1/dp/2612474)</li><li>[Amazon](http://amzn.to/2kUvuHh)</li>
 MicroSD Card (8Gb+)                | £7                    | A Sandisk Extreme/Ultra in 8Gb or 16Gb is preferred (based on usage bias) [Amazon](https://www.amazon.co.uk/gp/product/B012VKUSIA)
 up to 32V input down to to 5V  output DC-DC voltage converter | £11 | Pololu 5V 5A Step-Down Voltage Regulator D24V50F5 ([hobbytronics](http://www.hobbytronics.co.uk/d24v50f5-5v-step-down-regulator))
 2.1mm DC socket to micro-B USB plug | £1 | ([Amazon](https://www.amazon.co.uk/gp/product/B01K1TR7HS/))
 POE midspan injector leads         | £6 | ([Pimoroni](https://shop.pimoroni.com/products/passive-poe-cable-set))
 IP 67 rated enclosure with Ethernet and N-type holes, wall and pole mounting kit | £20 (plus £20 p&p) | EZNET EZ-SOE01W ([Aerial.net](http://www.aerial.net/shop/product/39/1102/ezynet-outdoor-enclosure-1-ethernet.html))
-LMR200/HDF200 co-axial cable       | £1/meter | Solwise
-N-type Plug for LMR200/HDF200 cable (50ohm) | £3.10 | Solwise
-N-Type plug/jack inline coaxial lightning arrestor | £31 | Diamond SP-3000P ([Waters and Stanton](http://hamradiostore.co.uk/diamond-sp-3000p-lightning-arrester.html))
-Ethernet Network surge arrestor    | £20 | APC PNET1GB
+LMR200/HDF200 co-axial cable       | £1/meter | [Solwise HDF200](http://www.solwise.co.uk/wireless_connectorssundries.htm)
+N-type Plug for LMR200/HDF200 cable (50ohm) ×2 | £3.10 | [Solwise N-Type 200 Plug](http://www.solwise.co.uk/wireless_connectorssundries.htm)
+N-Type plug/jack inline coaxial surge arrestor | £31 | Diamond SP-3000P <ul><li>[Waters and Stanton](http://hamradiostore.co.uk/diamond-sp-3000p-lightning-arrester.html)</li><li>[Radio World](http://www.radioworld.co.uk/static_discharge_protector/diamond-sp-3000p-lightning-surge-arrester-dc-3000-mhz-400w-pep-n-type-plug-to-n-type-socket)</li></ul>
+Ethernet Network surge arrestor    | £20 | <ul><li>eg [APC PNET1GB](http://amzn.to/2kzWMq8)</li><li>or [LRS01-E100](http://amzn.to/2m9gVjl)</li></ul>
 
  * The IP67 rated case that we're using has N-type connector holes, so we're
 standardising on N-type connectors for the antenna lead.
