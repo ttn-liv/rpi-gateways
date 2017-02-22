@@ -4,6 +4,9 @@ This build is heavily based on [ttn_zn's build](https://github.com/ttn-zh/ic880a
 but we're extending it to be standardised for several deployments, IP67 rated,
 with some access hardening, NAT punching and remote logging.
 
+Deployment is controlled via ansible, instructions are in the
+[deployment directory](deployment/README.md). 
+
 ## Shopping List
 
 ### Case
