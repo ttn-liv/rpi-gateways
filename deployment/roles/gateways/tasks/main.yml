@@ -71,17 +71,6 @@
     - systemctl daemon-reload
     - restart autossh-ttn-liv-ctl
 
-- name: copy the default id_rsa to the gateway (probably worse than each gateway having it's own)
-  copy:
-    src: id_rsa.autossh
-    dest: "/home/{{ ansible_user }}/.ssh/id_rsa"
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-    mode: 0600
-    directory_mode: 0700
-  notify:
-    - restart autossh-ttn-liv-ctl
-
 - name: start the autossh service
   service:
     name: autossh-ttn-liv-ctl
@@ -330,6 +319,14 @@
     enabled: true
 
 # debug output to feed back into the production hosts file
+- name: get the ssh pub key for connecting to the jump-host
+  shell: cat ~/.ssh/id_rsa.pub
+  register: ssh_pub_key
+
+- name: print the ssh pubkey for host
+  debug:
+    var: ssh_pub_key.stdout
+
 - name: find the address of the hidden service
   shell: cat ~/tor/hostname
   register: tor_hostname
