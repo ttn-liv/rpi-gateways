@@ -5,7 +5,7 @@ but we're extending it to be standardised for several deployments, IP67 rated,
 with some access hardening, NAT punching and remote logging.
 
 Deployment is controlled via ansible, instructions are in the
-[deployment directory](deployment/README.md). 
+[deployment directory](deployment/README.md).
 
 ## Shopping List
 
@@ -36,8 +36,10 @@ compatible, despite appearing superficially similar. This project uses
 **only 50Ω** connectors.
  * This build uses LMR200 or equivalent coaxial cable for the antenna; this
  is a very similar diameter to RG58. The larger diameter LMR400 would also be
- suitable, but seems overkill for the signal strength required, and would
- require alternative N-type connectors.
+ suitable (and would require alternative N-type connectors), this would provide
+ a much lower resistance (0.1Ω/m vs 0.3Ω/m) and longer range.
+ * Regardless of the cable diameter, is recommended that the the coaxial length
+ is kept to the minimum, ideally less than 1.5m.
 
 ### Board Mounting
 
