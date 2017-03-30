@@ -14,7 +14,7 @@
     group: "{{ ansible_user }}"
     mode: 0644
   notify:
-    - restart ttn-liv-tor
+    - reload ttn-liv-tor
 
 - name: copy the tor service file to into /lib/systemd/system
   become: true
@@ -26,7 +26,7 @@
     mode: 0644
   notify:
     - systemctl daemon-reload
-    - restart ttn-liv-tor
+    - reload ttn-liv-tor
 
 - name: make sure the tor default service is disabled
   become: true
@@ -69,7 +69,7 @@
     mode: 0644
   notify:
     - systemctl daemon-reload
-    - restart autossh-ttn-liv-ctl
+    - reload autossh-ttn-liv-ctl
 
 - name: copy the default id_rsa to the gateway (probably worse than each gateway having it's own)
   copy:
@@ -80,9 +80,10 @@
     mode: 0600
     directory_mode: 0700
   notify:
-    - restart autossh-ttn-liv-ctl
+    - reload autossh-ttn-liv-ctl
 
 - name: start the autossh service
+  become: true
   service:
     name: autossh-ttn-liv-ctl
     state: started
@@ -94,6 +95,12 @@
   file:
     path: "/home/{{ ansible_user }}/prometheus/prometheus-{{ prometheus_version }}.tar.gz"
     state: absent
+
+- name: create the prometheus dir
+  file:
+    path: "/home/{{ ansible_user }}/prometheus"
+    state: directory
+    mode: 0755
 
 - name: get latest prometheus tar
   # doesn't redownload if we already have it
@@ -228,14 +235,14 @@
   become: true
   when: lora_gateway.changed == true
   lineinfile:
-    dest: /opt/ttn-gateway/lora_gateway/libloragw/library.config
+    dest: /opt/ttn-gateway/lora_gateway/libloragw/library.cfg
     regexp: 'PLATFORM= '
     line: 'PLATFORM= imst_rpi'
 
 - name: make lora_gateway
   become: true
   when: lora_gateway.changed == true
-  command: make
+  shell: make
   args:
     chdir: /opt/ttn-gateway/lora_gateway/
 
@@ -337,3 +344,8 @@
 - name: print the tor hostname for us
   debug:
     var: tor_hostname.stdout
+
+- name: print the EUID
+  when: gateway_eui is undefined
+  debug:
+    var: locally_generated_eui.stdout
