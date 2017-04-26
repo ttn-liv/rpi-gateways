@@ -342,7 +342,24 @@
   debug:
     var: tor_hostname.stdout
 
+- name: record the tor_address in the local config file
+  delegate_to: localhost
+  lineinfile:
+    path: "{{ gateway_inventory_folder }}/{{ inventory_hostname }}.yml"
+    state: present
+    regexp: '^tor_address:'
+    line: "tor_address: {{ tor_hostname.stdout }}"
+
 - name: print the EUID
   when: gateway_eui is undefined
   debug:
     var: locally_generated_eui.stdout
+
+- name: record the locally_generated_eui in the local config file
+  when: gateway_eui is undefined
+  delegate_to: localhost
+  lineinfile:
+    path: "{{ gateway_inventory_folder }}/{{ inventory_hostname }}.yml"
+    state: present
+    regexp: '^gateway_eui:'
+    line: "gateway_eui: {{ locally_generated_eui.stdout }}"

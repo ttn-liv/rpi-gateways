@@ -1,0 +1,127 @@
+# verify the inputs that we collected
+- name: check jump_ssh_port is in range
+  assert:
+    that:
+      - "{{ jump_ssh_port }} >= 6000"
+      - "{{ jump_ssh_port }} < 7000"
+    msg: "The jump host ssh port must be between 6000 and 6999"
+
+- name: check prometheus_jump_port is in range
+  assert:
+    that:
+      - "{{ prometheus_jump_port }} >= 9000"
+      - "{{ prometheus_jump_port }} < 10000"
+    msg: "The prometheus jump host port must be between 9000 and 9999"
+
+- name: Check latitude
+  assert:
+    that:
+      - "{{ gate_lat }} >= -180"
+      - "{{ gate_lat }} <= 180"
+    msg: "Latitude must be set between -180 and 180 degrees"
+
+- name: Check longitude
+  assert:
+    that:
+      - "{{ gate_lon }} >= -180"
+      - "{{ gate_lon }} <= 180"
+    msg: "Longitude must be set between -180 and 180 degrees"
+
+- name: Check altitude
+  assert:
+    that:
+      - "{{ gate_alt }} >= -11521" # lowest decended depth in the Mariana Trench
+      - "{{ gate_alt }} <= 8848" # height of Everest
+    msg: "Gateway altitude must be a sensible number"
+
+# set the local config information for next time
+- name: Check the local config directory exists
+  delegate_to: localhost
+  file:
+    path: "{{ gateway_inventory_folder }}"
+    state: directory
+
+- name: create a new config file location
+  delegate_to: localhost
+  file:
+    path: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ new_hostname }}.yml"
+    state: touch
+
+- name: and link the config into the host_vars
+  delegate_to: localhost
+  file:
+    src: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ new_hostname }}.yml"
+    dest: "host_vars/{{ new_hostname }}.yml"
+    state: link
+
+- name: add ansible_host line
+  delegate_to: localhost
+  lineinfile:
+    path: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ new_hostname }}.yml"
+    state: present
+    regexp: '^ansible_host'
+    line: "ansible_host: {{ new_hostname }}{{ gateway_suffix }}.local"
+
+- name: add ansible_port line
+  delegate_to: localhost
+  lineinfile:
+    path: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ new_hostname }}.yml"
+    state: present
+    regexp: '^ansible_port:'
+    line: "ansible_port: 22"
+
+- name: add ssh_remote_port line
+  delegate_to: localhost
+  lineinfile:
+    path: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ new_hostname }}.yml"
+    state: present
+    regexp: '^ssh_remote_port:'
+    line: "ssh_remote_port: {{ jump_ssh_port }}"
+
+- name: add prometheus_remote_port line
+  delegate_to: localhost
+  lineinfile:
+    path: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ new_hostname }}.yml"
+    state: present
+    regexp: '^prometheus_remote_port:'
+    line: "prometheus_remote_port: {{ prometheus_jump_port }}"
+
+- name: add gateway_lat line
+  delegate_to: localhost
+  lineinfile:
+    path: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ new_hostname }}.yml"
+    state: present
+    regexp: '^gateway_lat:'
+    line: "gateway_lat: {{ gate_lat }}"
+
+- name: add gateway_lon line
+  delegate_to: localhost
+  lineinfile:
+    path: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ new_hostname }}.yml"
+    state: present
+    regexp: '^gateway_lon:'
+    line: "gateway_lon: {{ gate_lon }}"
+
+- name: add gateway_alt line
+  delegate_to: localhost
+  lineinfile:
+    path: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ new_hostname }}.yml"
+    state: present
+    regexp: '^gateway_alt:'
+    line: "gateway_alt: {{ gate_alt }}"
+
+- name: add gateway_name line
+  delegate_to: localhost
+  lineinfile:
+    path: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ new_hostname }}.yml"
+    state: present
+    regexp: '^gateway_name:'
+    line: "gateway_name: {{ new_hostname }}{{ gateway_suffix }}"
+
+- name: add gateway_email line
+  delegate_to: localhost
+  lineinfile:
+    path: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ new_hostname }}.yml"
+    state: present
+    regexp: '^gateway_email:'
+    line: "gateway_email: {{ default_contact_email }}"

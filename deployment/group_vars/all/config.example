@@ -1,0 +1,3 @@
+gateway_inventory_folder: ~/Projects/ttn/configs
+gateway_suffix: -ttn
+default_contact_email: TTN@example.com

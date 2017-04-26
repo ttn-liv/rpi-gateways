@@ -2,5 +2,28 @@
   serial: 1
   become_method: sudo
   roles:
-    - common
+    #- common
     - provisioning
+
+  vars_prompt:
+    - name: "new_hostname"
+      prompt: "Choose a new hostname"
+      private: no
+    - name: "jump_ssh_port"
+      prompt: "Set the jump host ssh port [6000-6999]"
+      private: no
+    - name: "prometheus_jump_port"
+      prompt: "choose a prometheus jump host port number [9000-9999]"
+      private: no
+    - name: "gate_lat"
+      prompt: "Set a gateway latitude"
+      private: no
+    - name: "gate_lon"
+      prompt: "Set a gateway longitude"
+      private: no
+    - name: "gate_alt"
+      prompt: "Set a gateway altitude"
+      private: no
+    - name: "github_user"
+      prompt: "Provide a github username to auto-retrieve ssh pubkeys"
+      private: no
