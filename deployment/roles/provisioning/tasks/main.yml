@@ -125,3 +125,71 @@
     state: present
     regexp: '^gateway_email:'
     line: "gateway_email: {{ default_contact_email }}"
+
+# Setup the RPi
+- name: create pi_user
+  become: true
+  user:
+    name: "{{ pi_user }}"
+    groups: sudo
+    append: yes
+    generate_ssh_key: yes
+    ssh_key_file: .ssh/id_rsa
+
+- name: collect the ssh_pub_key
+  become: true
+  shell: "cat /home/{{ pi_user }}/.ssh/id_rsa.pub"
+  register: ssh_pub_key
+
+- name: report ssh_pub_key
+  debug:
+    var: ssh_pub_key.stdout
+
+- name: record the ssh_pub_key to the config file
+  delegate_to: localhost
+  lineinfile:
+    path: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ new_hostname }}.yml"
+    state: present
+    regexp: '^ssh_public_key'
+    line: "ssh_public_key: {{ ssh_pub_key.stdout }}"
+
+- name: set pi_user as passwordless root
+  become: true
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '{{ pi_user }} ALL='
+    line: '{{ pi_user }} ALL= NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: add github public keys
+  become: true
+  authorized_key:
+    user: "{{ pi_user }}"
+    state: present
+    key: "https://github.com/{{ github_user }}.keys"
+
+- name: change to the new_hostname
+  become: true
+  template:
+    src: hostname.j2
+    dest: /etc/hostname
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - reboot-pi
+
+- name: ensure staging file exists
+  delegate_to: localhost
+  file:
+    path: staging
+    type: touch
+
+- name: register the new gateway under staging
+  delegate_to: localhost
+  lineinfile:
+    path: staging
+    state: present
+    regexp: '{{ new_hostname }}'
+    line: "{{ new_hostname }}"

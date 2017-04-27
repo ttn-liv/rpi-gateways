@@ -1,0 +1,4 @@
+---
+- name: reboot-pi
+  become: true
+  command: shutdown -r +1 # wait 1 min to allow ansible to exit cleanly

@@ -326,13 +326,13 @@
     enabled: true
 
 # debug output to feed back into the production hosts file
-- name: get the ssh pub key for connecting to the jump-host
-  shell: cat ~/.ssh/id_rsa.pub
-  register: ssh_pub_key
+#- name: get the ssh pub key for connecting to the jump-host
+  #shell: cat ~/.ssh/id_rsa.pub
+  #register: ssh_pub_key
 
-- name: print the ssh pubkey for host
-  debug:
-    var: ssh_pub_key.stdout
+#- name: print the ssh pubkey for host
+  #debug:
+    #var: ssh_pub_key.stdout
 
 - name: find the address of the hidden service
   shell: cat ~/tor/hostname
@@ -345,7 +345,7 @@
 - name: record the tor_address in the local config file
   delegate_to: localhost
   lineinfile:
-    path: "{{ gateway_inventory_folder }}/{{ inventory_hostname }}.yml"
+    path: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ inventory_hostname }}.yml"
     state: present
     regexp: '^tor_address:'
     line: "tor_address: {{ tor_hostname.stdout }}"
@@ -359,7 +359,7 @@
   when: gateway_eui is undefined
   delegate_to: localhost
   lineinfile:
-    path: "{{ gateway_inventory_folder }}/{{ inventory_hostname }}.yml"
+    path: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ inventory_hostname }}.yml"
     state: present
     regexp: '^gateway_eui:'
-    line: "gateway_eui: {{ locally_generated_eui.stdout }}"
+    line: "gateway_eui: {{ locally_generated_eui.stdout | upper }}"

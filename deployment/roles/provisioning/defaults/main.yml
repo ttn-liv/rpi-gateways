@@ -1,0 +1,3 @@
+pi_user: ttn
+pi_group: ttn
+gateway_suffix: -ttn
