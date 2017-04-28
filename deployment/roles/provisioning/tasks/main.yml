@@ -183,8 +183,15 @@
 - name: ensure staging file exists
   delegate_to: localhost
   file:
-    path: staging
-    type: touch
+    path: "{{ gateway_inventory_folder }}/deployment/staging"
+    state: touch
+
+- name: ensure link to staging file exists
+  delegate_to: localhost
+  file:
+    src: "{{ gateway_inventory_folder }}/deployment/staging"
+    dest: staging
+    state: link
 
 - name: register the new gateway under staging
   delegate_to: localhost
