@@ -22,7 +22,7 @@ Raspberry Pi 2                     | £32                   | RPi2: <ul><li>[Far
 MicroSD Card (8Gb+)                | £7                    | A Sandisk Extreme/Ultra in 8Gb or 16Gb is preferred (based on usage bias) [Amazon](https://www.amazon.co.uk/gp/product/B012VKUSIA)
 up to 32V input down to to 5V  output DC-DC voltage converter | £11 | Pololu 5V 5A Step-Down Voltage Regulator D24V50F5 ([hobbytronics](http://www.hobbytronics.co.uk/d24v50f5-5v-step-down-regulator))
 2.1mm DC socket to micro-B USB plug | £1 | ([Amazon](https://www.amazon.co.uk/gp/product/B01K1TR7HS/))
-POE midspan injector leads         | £6 | ([Pimoroni](https://shop.pimoroni.com/products/passive-poe-cable-set))
+IP68 Ethernet DC splitter         | £5 | ([Aerial.net](https://www.aerial.net/shop/product_info.php?products_id=1574))
 IP 67 rated enclosure with Ethernet and N-type holes, wall and pole mounting kit | £20 (plus £20 p&p) | EZNET EZ-SOE01W ([Aerial.net](http://www.aerial.net/shop/product/39/1102/ezynet-outdoor-enclosure-1-ethernet.html))
 LMR200/HDF200 co-axial cable       | £1/meter | [Solwise HDF200](http://www.solwise.co.uk/wireless_connectorssundries.htm)
 N-type Plug for LMR200/HDF200 cable (50ohm) ×2 | £3.10 | [Solwise N-Type 200 Plug](http://www.solwise.co.uk/wireless_connectorssundries.htm)
