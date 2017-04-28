@@ -7,6 +7,8 @@ with some access hardening, NAT punching and remote logging.
 Deployment is controlled via ansible, instructions are in the
 [deployment directory](deployment/README.md).
 
+> TODO: Build instructions are not yet available
+
 ## Shopping List
 
 ### Case
