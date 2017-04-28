@@ -180,6 +180,18 @@
   notify:
     - reboot-pi
 
+- name: set new_hostname in localhost
+  become: true
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^127\.0\.0\.1'
+    line: '127.0.0.1 {{ new_hostname }}{{ gateway_suffix }}'
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - reboot-pi
+
 - name: ensure staging file exists
   delegate_to: localhost
   file:
