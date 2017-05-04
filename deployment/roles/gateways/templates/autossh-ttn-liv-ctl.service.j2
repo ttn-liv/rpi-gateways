@@ -1,10 +1,10 @@
 [Unit]
-Description=Keep a tunnel to '{{ control_hostname }}' open, reverse ssh port & prometheus port
+Description=Keep a tunnel to '{{ jump_host_alias }}' open, reverse ssh port & prometheus port
 After=network.target
 
 [Service]
 User={{ ansible_user }}
-ExecStart=/usr/bin/autossh -N -R *:{{ ssh_remote_port }}:localhost:22 -R {{ prometheus_remote_port }}:localhost:9090 autossh@{{ control_hostname }}
+ExecStart=/usr/bin/autossh -N -R *:{{ ssh_remote_port }}:localhost:22 -R {{ prometheus_remote_port }}:localhost:9090 autossh@{{ jump_host_alias }}
 
 [Install]
 WantedBy=multi-user.target

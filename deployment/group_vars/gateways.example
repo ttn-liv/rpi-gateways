@@ -5,7 +5,7 @@ ansible_user: ttn
 
 # set the name of the graphana, autossh receiver and ansible jump-host
 # where the ssh tunnels will be available from
-control_hostname: my.always.on.vps.com
+jump_host_alias: my.always.on.vps.com
 
 # set specific program versions
 prometheus_version: 1.5.2.linux-armv7

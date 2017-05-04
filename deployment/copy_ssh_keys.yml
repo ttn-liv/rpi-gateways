@@ -1,0 +1,23 @@
+- hosts: gateways
+  become_method: sudo
+  tasks:
+  - name: collect ssh key
+    when: ssh_public_key is undefined
+    shell: "cat /home/{{ pi_user }}/.ssh/id_rsa.pub"
+    register: ssh_pub_key
+  - name: send ssh key to jump host
+    when: ssh_public_key is defined
+    delegate_to: {{ jump_host_alias }}
+    become: true
+    authorized_key:
+      user: {{ jump_host_user }}
+      state: present
+      key: ssh_public_key
+  - name: send ssh key to jump host
+    when: ssh_public_key is undefined
+    delegate_to: {{ jump_host_alias }}
+    become: true
+    authorized_key:
+      user: {{ jump_host_user }}
+      state: present
+      key: ssh_pub_key

@@ -154,7 +154,7 @@ ProxyCommand socat STDIO SOCKS4A:127.0.0.1:%h:%p,socksport=9050
 
 Transfer any gateway names from staging to production.
 
-Update the `ansible_host` and `ansible_port` to match the `control_hostname` and
+Update the `ansible_host` and `ansible_port` to match the `jump_host_alias` and
 `ssh_remote_port` respectively, so subsequent connections go via the jump host.
 
 Run `ansible-playbook -i production site.yml` to sequentially update each host.
