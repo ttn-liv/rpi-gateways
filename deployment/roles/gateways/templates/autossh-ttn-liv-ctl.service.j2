@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 User={{ ansible_user }}
-ExecStart=/usr/bin/autossh -N -R *:{{ ssh_remote_port }}:localhost:22 -R {{ prometheus_remote_port }}:localhost:9090 {{ jump_host_user }}@{{ jump_host_alias }}
+ExecStart=/usr/bin/autossh -N -R *:{{ ssh_remote_port }}:localhost:22 -R {{ prometheus_remote_port }}:localhost:9090 {{ jump_host_user }}@{{ hostvars[jump_host_alias]['ansible_host'] }}
 
 [Install]
 WantedBy=multi-user.target

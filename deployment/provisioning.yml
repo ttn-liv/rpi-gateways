@@ -15,6 +15,9 @@
     - name: "prometheus_jump_port"
       prompt: "choose a prometheus jump host port number [9000-9999]"
       private: no
+    - name: "preferred_jump_host"
+      prompt: "Choose a preferred_jump_host alias"
+      private: no
     - name: "gate_lat"
       prompt: "Set a gateway latitude"
       private: no

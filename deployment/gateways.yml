@@ -1,6 +1,8 @@
 - hosts: gateways
   serial: 1
   become_method: sudo
+  vars:
+    esdsa_host_keys: False
   roles:
     - common
     - gateways
