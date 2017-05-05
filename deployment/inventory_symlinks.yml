@@ -1,10 +1,9 @@
 - hosts: localhost
-  delegate_to: localhost
   vars_prompt:
     - name: "gatewy_invent_fold"
-      prompt: "Set the path for the gateway_inventory_folder"
+      prompt: "Set the path for the gateway_inventory_folder (if it doesn't already exist)"
       private: no
-      default: {{ gateway_inventory_folder }}
+      default: ../../configs
   tasks:
   - name: use the preset gateway_inventory_folder
     when: gateway_inventory_folder is undefined
@@ -12,15 +11,15 @@
       gateway_inventory_folder: gatewy_invent_fold
   - name: create configs directory
     file:
-      path: {{ gateway_inventory_folder }}/deployment
+      path: "{{ gateway_inventory_folder }}/deployment"
       state: directory
   - name: create group_vars directory
     file:
-      path: {{ gateway_inventory_folder }}/deployment/group_vars/all
+      path: "{{ gateway_inventory_folder }}/deployment/group_vars/all"
       state: directory
   - name: create host_vars directory
     file:
-      path: {{ gateway_inventory_folder }}/deployment/host_vars
+      path: "{{ gateway_inventory_folder }}/deployment/host_vars"
       state: directory
   - name: find the files in configs/deployment
     shell: find . -maxdepth 1 -type f
@@ -29,38 +28,67 @@
     register: inventory_files
   - name: symlink in inventory files
     file:
-      dest: {{ item }}
-      src: {{ gateway_inventory_folder }}/deployment/{{ item }}
+      dest: "{{ item }}"
+      src: "{{ gateway_inventory_folder }}/deployment/{{ item }}"
       state: link
-    with_items: inventory_files.stdout_lines
+    with_items: "{{ inventory_files.stdout_lines }}"
   - name: find the files in configs/deployment/host_vars
     shell: find . -maxdepth 1 -type f
     args:
       chdir: "{{ gateway_inventory_folder }}/deployment/host_vars"
     register: host_var_files
-  - name: symlink in inventory files
+  - name: symlink in host_vars files
     file:
       dest: host_vars/{{ item }}
-      src: {{ gateway_inventory_folder }}/deployment/host_vars/{{ item }}
+      src: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ item }}"
       state: link
-    with_items: host_var_files.stdout_lines
+    with_items: "{{ host_var_files.stdout_lines }}"
   - name: find the files in configs/deployment/group_vars
     shell: find . -maxdepth 1 -type f
     args:
       chdir: "{{ gateway_inventory_folder }}/deployment/group_vars"
     register: group_vars_files
-  - name: symlink in inventory files
+  - name: symlink in group_vars files
     file:
       dest: group_vars/{{ item }}
-      src: {{ gateway_inventory_folder }}/deployment/group_vars/{{ item }}
+      src: "{{ gateway_inventory_folder }}/deployment/group_vars/{{ item }}"
       state: link
-    with_items: group_var_files.stdout_lines
+    with_items: "{{ group_vars_files.stdout_lines }}"
   - name: check the group_vars/all/config.yml exists
     file:
-      path: {{ gateway_inventory_folder }}/deployment/group_vars/all/config.yml
+      path: "{{ gateway_inventory_folder }}/deployment/group_vars/all/config.yml"
       state: touch
   - name: link group_vars/all/config.yml from configs
     file:
       dest: group_vars/all/config.yml
-      src: {{ gateway_inventory_folder }}/group_vars/all/config.yml
+      src: "{{ gateway_inventory_folder }}/deployment/group_vars/all/config.yml"
       state: link
+  - name: record the gateway_inventory_folder in the group_vars config.yml
+    lineinfile:
+      path: "{{ gateway_inventory_folder }}/deployment/group_vars/all/config.yml"
+      regexp: '^gateway_inventory_folder:'
+      line: "gateway_inventory_folder: {{ gateway_inventory_folder }}"
+  - name: add gateway_suffix if not specified
+    when: gateway_suffix is undefined
+    lineinfile:
+      path: "{{ gateway_inventory_folder }}/deployment/group_vars/all/config.yml"
+      regexp: '^gateway_suffix:'
+      line: "gateway_suffix: -ttn"
+  - name: add default_contact_email if not specified
+    when: default_contact_email is undefined
+    lineinfile:
+      path: "{{ gateway_inventory_folder }}/deployment/group_vars/all/config.yml"
+      regexp: '^default_contact_email:'
+      line: "default_contact_email: ttn@changeme.me"
+  - name: add default user name if not specified
+    when: pi_user is undefined
+    lineinfile:
+      path: "{{ gateway_inventory_folder }}/deployment/group_vars/all/config.yml"
+      regexp: '^pi_user:'
+      line: "pi_user: ttn"
+  - name: add default user group if not specified
+    when: pi_group is undefined
+    lineinfile:
+      path: "{{ gateway_inventory_folder }}/deployment/group_vars/all/config.yml"
+      regexp: '^pi_group:'
+      line: "pi_group: ttn"

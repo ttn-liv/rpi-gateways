@@ -1,3 +1,5 @@
-gateway_inventory_folder: ~/Projects/ttn/configs
+gateway_inventory_folder: ../../configs
 gateway_suffix: -ttn
-default_contact_email: TTN@example.com
+default_contact_email: ttn@changeme.me
+pi_user: ttn
+pi_group: ttn
