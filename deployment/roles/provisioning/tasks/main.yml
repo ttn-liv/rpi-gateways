@@ -136,6 +136,14 @@
     generate_ssh_key: yes
     ssh_key_file: .ssh/id_rsa
 
+- name: record the ansible_user to the config file
+  delegate_to: localhost
+  lineinfile:
+    path: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ new_hostname }}.yml"
+    state: present
+    regexp: '^ansible_user:'
+    line: "ansible_user: {{ pi_user }}"
+
 - name: collect the ssh_pub_key
   become: true
   shell: "cat /home/{{ pi_user }}/.ssh/id_rsa.pub"

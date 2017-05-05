@@ -74,12 +74,6 @@
       path: "{{ gateway_inventory_folder }}/deployment/group_vars/all/config.yml"
       regexp: '^gateway_suffix:'
       line: "gateway_suffix: -ttn"
-  - name: add default_contact_email if not specified
-    when: default_contact_email is undefined
-    lineinfile:
-      path: "{{ gateway_inventory_folder }}/deployment/group_vars/all/config.yml"
-      regexp: '^default_contact_email:'
-      line: "default_contact_email: ttn@changeme.me"
   - name: add default user name if not specified
     when: pi_user is undefined
     lineinfile:
