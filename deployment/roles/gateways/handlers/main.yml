@@ -15,7 +15,7 @@
     name: ttn-liv-tor
     state: restarted
 
-- name: reload autossh-ttn-liv-ctl
+- name: reload autossh
   become: true
   service:
     name: autossh-ttn-liv-ctl

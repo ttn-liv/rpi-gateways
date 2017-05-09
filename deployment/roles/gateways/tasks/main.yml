@@ -129,7 +129,7 @@
     mode: 0644
   notify:
     - systemctl daemon-reload
-    - reload autossh-ttn-liv-ctl
+    - reload autossh
 
 - name: start the autossh service
   become: true
