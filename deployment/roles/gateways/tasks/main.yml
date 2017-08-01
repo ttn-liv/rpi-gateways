@@ -106,7 +106,7 @@
     state: present
     key: "{{ ssh_public_key }}"
   notify:
-    - restart autossh
+    - reload autossh
 
 - name: send ssh key to jump host
   when: ssh_public_key is undefined
@@ -117,7 +117,7 @@
     state: present
     key: "{{ ssh_pub_key.stdout }}"
   notify:
-    - restart autossh
+    - reload autossh
 
 - name: copy the remote auto ssh service template
   become: true
