@@ -1,8 +1,37 @@
 # RPi Gateways
 
-This build is heavily based on [ttn_zn's build](https://github.com/ttn-zh/ic880a-gateway),
-but we're extending it to be standardised for several deployments, IP67 rated,
-with some access hardening, NAT punching and remote logging.
+A Raspberry Pi and iC880a based gateway for use primarily with The
+Things Network, a free-to-use community owned network of LoRaWAN gateways, backed
+by a world leading IoT platform. As LoRaWAN is still an early stage technology,
+and access to hardware is somewhat limited, this repository is an attempt to
+standardise some of the available "build a gateway" guides into something that
+is both *build it now to try* and *deploy it now outside*.
+
+The build is based heavily on [ttn_zn's instructions](https://github.com/ttn-zh/ic880a-gateway),
+but standardises the parts, allows for central updates and monitoring of several gateways,
+an IP67 rated housing, with some access hardening, NAT punching and remote logging.
+
+## Features
+
+ * **Available now** — Uses only currently available parts, with links on where to
+ order them today.
+ * **Community driven** — open specification leading from existing build guides.
+ * **Robust** — complete listings of parts and source, and build guide for everything
+ but the mounting choice (Everything except the screws)™.
+ * **Remotely Accessible** — because the last thing you need to do is climb a
+ ladder to update Raspbian. Except hardware failure, it shouldn't need physical access.
+ * **NAT punching** — no special router configuration required. Plug into a router
+ with internet access and it works.
+ * **Super TOR powers** — even if the standard remote access fails, gateways are
+ ssh accessible via TOR, for super-slow remote access in a pinch.
+ * **Power over Ethernet** — single wire supply for both power and network.
+ * **WiFi-free** — wired connection, because it's a supposed to be a device for
+ a reliable network with good uptime.
+ * **Ansible deployment** — running ten gateways is the same amount of work as
+ running one.
+ * **Deploy outside** — with an IP-rated case, weatherproof antenna and connectors,
+ and fixing hardware for pole or wall mounting, this gateway can serve the wider
+ area.
 
 Deployment is controlled via ansible, instructions are in the
 [deployment directory](deployment/README.md).
