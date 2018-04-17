@@ -126,6 +126,14 @@
     regexp: '^gateway_email:'
     line: "gateway_email: {{ default_contact_email }}"
 
+- name: add github_user line
+  delegate_to: localhost
+  lineinfile:
+    path: "{{ gateway_inventory_folder }}/deployment/host_vars/{{ new_hostname }}.yml"
+    state: present
+    regexp: '^github_user:'
+    line: "github_user: {{ github_user }}"
+
 # Setup the RPi
 - name: create pi_user
   become: true

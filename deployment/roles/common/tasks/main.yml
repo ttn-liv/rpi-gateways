@@ -31,3 +31,20 @@
     - vim
     - tor
     - deb.torproject.org-keyring
+
+- name: update multiple ssh access keys
+  become: true
+  authorized_key:
+    user: "{{ ansible_user }}"
+    state: present
+    key: "https://github.com/{{ item }}.keys"
+  with_items: "{{ github_users }}"
+  when: github_users is defined
+
+- name: update single ssh access keys
+  become: true
+  authorized_key:
+    user: "{{ ansible_user }}"
+    state: present
+    key: "https://github.com/{{ github_user }}.keys"
+  when: github_user is defined

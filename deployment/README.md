@@ -58,7 +58,7 @@ fresh copy of Raspian-Lite (currently 2017-03-02) to a micro SD card
  1. connect a network cable to the RPi and power on,
  1. wait for a few minutes to allow the initial setup to run; the pi will
  auto-expand the file system, arrange the ssh daemon and reboot,
- 1. try and manually ssh to the pi (`ssh pi@raspberrypi.local` passsword: `rasbian`)
+ 1. try and manually ssh to the pi (`ssh pi@raspberrypi.local` passsword: `raspbian`)
    * the RPi must be the only `raspberrypi.local` device on the network (⚠)
    otherwise the ansible playbook might affect the wrong device,
    * if you get a warning about possible `WARNING: POSSIBLE DNS SPOOFING DETECTED!`,
